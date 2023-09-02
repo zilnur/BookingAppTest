@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct BookingAppApp: App {
+    @ObservedObject var coordinator = Coordinator()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CoordinatorView(coordinator: coordinator)
         }
     }
 }
