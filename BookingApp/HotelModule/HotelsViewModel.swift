@@ -7,16 +7,12 @@
 import Foundation
 import Combine
 
-protocol HotelsViewModelProtocol {
-    var model: HotelsModel { get set }
-    var isLoaded: Bool { get set }
-    func open()
-}
-
-class HotelsViewModel: HotelsViewModelProtocol, ObservableObject {
+class HotelsViewModel: ObservableObject {
     
     @Published var model: HotelsModel = .init()
     @Published var isLoaded = false
+    @Published var errorString = ""
+    @Published var isError = false
     
     private var networkManager: NetworkManagerProtocol
     private var subscriber = Set<AnyCancellable>()
@@ -25,22 +21,28 @@ class HotelsViewModel: HotelsViewModelProtocol, ObservableObject {
     init(networkManager: NetworkManagerProtocol, coordinator: Coordinator) {
         self.networkManager = networkManager
         self.coordinator = coordinator
-        if !isLoaded {
-            self.setModel()
-        }
+        self.setModel()
     }
     
+    //Обращается к NetworkManger и наполняет модель
     func setModel() {
         networkManager.dataTaskPublisher(path: .hotels, model: HotelsModel.self)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [unowned self] error in
-                isLoaded = true
+                switch error {
+                case .failure(let error):
+                    errorString = error.localizedDescription
+                    isError.toggle()
+                case .finished:
+                    isLoaded = true
+                }
             }, receiveValue: { model in
                 self.model = model
             })
             .store(in: &subscriber)
     }
     
+    //Переход на следующий экран
     func open() {
         coordinator.toRoomsModule(title: model.name)
     }

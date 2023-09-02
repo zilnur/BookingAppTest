@@ -29,6 +29,11 @@ struct RoomsView: View {
             }
         } else {
             ProgressView()
+                .alert(viewModel.errorString, isPresented: $viewModel.isError) {
+                    Button("Ok") {
+                        viewModel.setModel()
+                    }
+                }
         }
     }
 }

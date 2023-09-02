@@ -9,6 +9,7 @@ import SwiftUI
 
 extension String {
     
+    //Локализация строки
     func localize() -> String {
         NSLocalizedString(self, comment: "")
     }

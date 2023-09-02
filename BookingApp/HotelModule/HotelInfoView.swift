@@ -2,7 +2,6 @@
 import SwiftUI
 
 struct HotelInfoView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var viewModel: HotelsViewModel
     
     var body: some View {
@@ -21,6 +20,11 @@ struct HotelInfoView: View {
                 }
             } else {
                 ProgressView()
+            }
+        }
+        .alert(viewModel.errorString, isPresented: $viewModel.isError) {
+            Button("Ok") {
+                viewModel.setModel()
             }
         }
     }

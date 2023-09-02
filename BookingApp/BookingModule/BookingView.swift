@@ -93,6 +93,11 @@ struct BookingView: View {
                 ProgressView()
             }
         }
+        .alert(viewModel.errorString, isPresented: $viewModel.isError) {
+            Button("Ok") {
+                viewModel.setModel()
+            }
+        }
     }
     
     @ViewBuilder

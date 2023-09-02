@@ -18,30 +18,34 @@ class Coordinator: ObservableObject {
     @Published var roomsViewModel: RoomsViewModel?
     @Published var bookingViewModel: BookingViewModel?
     @Published var successViewModel: SuccessViewModel?
-    let networkmanager: NetworkManagerProtocol
     @Published var path = [Route]()
+    let networkmanager: NetworkManagerProtocol
     
     init() {
         self.networkmanager = NetworkManager()
         self.hotelViewModel = HotelsViewModel(networkManager: networkmanager, coordinator: self)
     }
     
+    //Переход на модуль выбора номеров
     func toRoomsModule(title: String) {
         self.roomsViewModel = RoomsViewModel(network: networkmanager,title: title, coordinator: self)
         path.append(.rooms)
     }
     
+    //Переход на модуль бронирования
     func toBookingModeul() {
         self.bookingViewModel = BookingViewModel(network: networkmanager, coordinator: self)
         path.append(.booking)
     }
     
+    //Переход на модуль информирования о совершенной оплате
     func toSuccessModule() {
         self.successViewModel = SuccessViewModel(coordinator: self)
         path.append(.success)
         
     }
     
+    //Возврат к корневому View
     func popToRoot() {
         path.removeAll()
     }

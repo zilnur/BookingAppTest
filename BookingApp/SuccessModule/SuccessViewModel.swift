@@ -15,6 +15,7 @@ class SuccessViewModel: ObservableObject {
         self.coordinator = coordinator
     }
     
+    //Возврат к корневому View в стэке
     func back() {
         coordinator.popToRoot()
     }

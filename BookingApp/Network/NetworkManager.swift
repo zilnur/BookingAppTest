@@ -26,6 +26,7 @@ class NetworkManager: NetworkManagerProtocol {
         return decoder
     }()
     
+    //Собирает URL запроса
     private func url(path: Paths) -> URL? {
         var components = URLComponents()
         components.scheme = "https"
@@ -34,6 +35,7 @@ class NetworkManager: NetworkManagerProtocol {
         return components.url
     }
     
+    //Запрос в сеть по указанному URL
     func dataTaskPublisher<T: Decodable>(path: Paths, model: T.Type) -> AnyPublisher<T, Error> {
         URLSession.shared.dataTaskPublisher(for: url(path: path)!)
             .map {$0.data}
